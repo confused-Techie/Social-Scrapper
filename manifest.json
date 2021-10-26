@@ -1,0 +1,22 @@
+{
+  "name": "Social Scrapper",
+  "version": "0.1",
+  "description": "Simple way to collect Instagram Photos",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "webNavigation",
+    "webRequest",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.instagram.com/",
+    "https://*.cdninstagram.com/"
+  ],
+  "action": {
+    "default_title": "Check Currently Available Images",
+    "default_popup": "popup.html"
+  }
+}

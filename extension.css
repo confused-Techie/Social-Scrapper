@@ -1,0 +1,36 @@
+body {
+  background-color: black;
+  color: white;
+}
+
+.title {
+  margin: auto;
+  width: 50%;
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.contentFill {
+  text-align: center;
+}
+
+ul {
+  text-align: center;
+}
+
+li {
+  display: inline-block;
+}
+
+button {
+  margin: 0 auto;
+  display: block;
+  background-color: #f44336;
+  border: none;
+  color: white;
+  text-align: center;
+  display: block;
+  font-size: 16px;
+}
