@@ -14,7 +14,12 @@ chrome.webNavigation.onCompleted.addListener(() => {
 
   chrome.webRequest.onCompleted.addListener(function(details){
 
-    if (details.url.includes('p640x640') || details.url.includes('s640x640')) {
+    if (details.url.includes('p640x640') || details.url.includes('s640x640') || details.url.includes('p1080x1080') || details.url.includes('s1080x1080') || (details.url.includes('/e35/') && !(details.url.includes('s150x150') || details.url.includes('s320x320')))  ) {
+
+      console.info(`Matching URL to add: ${details.url}`);
+
+      // Set the badge color to blue to indicate its starting to save
+      chrome.action.setBadgeBackgroundColor({color: "#0000ff"});
 
       chrome.tabs.query({ active: true, currentWindow: true }, function(tab) {
 
@@ -22,17 +27,48 @@ chrome.webNavigation.onCompleted.addListener(() => {
         // k a t e [emoji] (@helloiamkate) * Instagram photos and videos
         // we want to grab everything between the parentheses
 
-        var tempTab = (String(tab[0].title)).match(/\((.*)\)/).pop();
+        // Since in some instances this can fail, this will default to user.
+        var tempTab = 'user';
+
+        try {
+          tempTab = (String(tab[0].title)).match(/\((.*)\)/).pop();
+        } catch(err) {
+          console.log(`Error Occured Setting Tab: ${err}`);
+          console.log('Defaulting Tab to user');
+        }
+
 
         var tempJSON = { title: tempTab, url: details.url, request: details.requestId };
 
-        imageList.push(tempJSON);
 
-        chrome.storage.local.set({'imageList': imageList}, function() {
-          console.log('Saved Image List to Local Storage');
-        });
+        if (!imageList.includes(details.url)) {
+          imageList.push(details.url);
+
+          chrome.storage.local.set({'imageList': imageList}, function() {
+            console.log('Saved Image List to Local Storage');
+
+            chrome.storage.local.set({'user': tempTab}, function() {
+              console.log('Saved Current Instagram User to Local Storage');
+            });
+
+            chrome.action.setBadgeText({text: `${imageList.length}`});
+          });
+        } else {
+          console.error(`This URL has already been saved: ${details.url}`);
+        }
+        //imageList.push(tempJSON);
+
+        //chrome.storage.local.set({'imageList': imageList}, function() {
+        //  console.log('Saved Image List to Local Storage');
+
+        //  chrome.action.setBadgeText({text: `${imageList.length}`});
+
+        //});
       });
 
+    } else {
+      // the web request did not match the ifs
+      console.info(`Ignored the following link: ${details.url}`);
     }
   },
   {urls: ["<all_urls>" ],types:["image","media"]});

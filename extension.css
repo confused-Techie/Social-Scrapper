@@ -27,10 +27,21 @@ li {
 button {
   margin: 0 auto;
   display: block;
-  background-color: #f44336;
+  /**background-color: #f44336;**/
   border: none;
-  color: white;
+  /**color: white;**/
   text-align: center;
   display: block;
   font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.alarm {
+  color: white;
+  background-color: #f44336;
+}
+
+.friendly {
+  color: black;
+  background-color: rgb(0,0,255);
 }
